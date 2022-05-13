@@ -1,18 +1,94 @@
-import { Box, Button } from 'native-base';
+import { Avatar, VStack, Text, Button } from 'native-base';
+import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { useDispatch } from 'react-redux';
+import BiodataList from '../components/BiodataList';
+import { View } from '../components/Themed';
+import useAuth from '../hooks/useAuth';
+import notification from '../libs/notification';
+import { ROUTES_NAME } from '../libs/router';
+import { userDataValidationSchema } from '../libs/validation';
+import { userLogout } from '../services/user';
+import { SET_AUTH_TOKEN, SET_USER_DATA } from '../store/slicers/user';
 import { RootTabScreenProps } from '../types';
 
 export default function ProfileScreen({ navigation }: RootTabScreenProps<'Profile'>) {
+
+  const { isLogin, userData } = useAuth();
+  const dispatch = useDispatch()
+  const [mapUserData, setMapUserData] = useState<any>([]);
+
+  const handleLogout = async () => {
+    const isSuccessLogout = await userLogout();
+
+    dispatch(SET_USER_DATA({
+      email: '',
+      password: '',
+      id: '',
+      address: '',
+      name: '',
+      phone: '',
+      image: ''
+    }))
+    dispatch(SET_AUTH_TOKEN(''))
+    notification.success(`Berhasil keluar dari akun`);
+    if (isSuccessLogout) return navigation.navigate('Home')
+  }
+
+  useEffect(() => {
+    const newUserData = Object.entries(userData).filter((data) => data[0] !== 'password')
+      .map((data) => {
+        const newData = {
+          key: data[0],
+          value: data[1],
+          validationSchema: userDataValidationSchema[data[0]],
+          field: {
+            type: data[0] === 'image' ? 'file' : 'text',
+            keyType: data[0] === 'email' ? 'email-address' : 'default',
+          }
+        }
+        if (data[0] !== 'password' && data[0] !== 'id') {
+          return newData
+        }
+        return null
+      })
+
+    setMapUserData(newUserData);
+  }, [userData])
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/ProfileScreen.tsx" />
-      <Button onPress={() => navigation.navigate('Login')}>Login</Button>
-
+      <VStack space='5' w='full' h='1/3' mb='5' position='relative' backgroundColor='tertiary.500' borderBottomRadius='3xl'>
+        {
+          isLogin ?
+            <>
+              <Avatar
+                key={userData.image}
+                bg="gray.400"
+                mx='auto'
+                mt='5'
+                source={{
+                  uri: userData.image
+                }}
+                size="xl">
+                ?
+              </Avatar>
+              <VStack space='1' mx='auto'>
+                <Text fontSize='lg' textAlign='center' fontWeight='bold' color='#fff'>{userData.name || '---'}</Text>
+                <Text textAlign='center' color='#fff'>{userData.email}</Text>
+              </VStack>
+            </>
+            :
+            <VStack my='12'>
+              <Text fontSize='lg' textAlign='center' fontWeight='bold' color='#e11d48'>Anda Belum Login!</Text>
+              <Text textAlign='center' color='#fff'>Silahkan login terlebih dahulu</Text>
+              <Button variant='solid' size='md' colorSchema='primary' w='32' mx='auto' mt='5' onPress={() => navigation.navigate(ROUTES_NAME.LOGIN)}>
+                Login
+              </Button>
+            </VStack>
+        }
+      </VStack>
+      <BiodataList userData={mapUserData} navigation={navigation} handleLogout={handleLogout} key={userData.email} />
     </View>
   );
 }
@@ -20,8 +96,8 @@ export default function ProfileScreen({ navigation }: RootTabScreenProps<'Profil
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#fff',
+    position: 'relative'
   },
   title: {
     fontSize: 20,
