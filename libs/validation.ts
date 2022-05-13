@@ -10,3 +10,19 @@ export const atuhValidationSchema = yup.object().shape({
         .min(8, ({ min }) => `Password must be at least ${min} characters`)
         .required('Password is required'),
 })
+
+
+export const userDataValidationSchema = {
+    name: yup.object().shape({
+        name: yup.string().required('Name is required').min(5)
+    }),
+    address: yup.object().shape({
+        address: yup.string().required('Address is required').min(20)
+    }),
+    phone: yup.object().shape({
+        phone: yup.string().required('Phone is required').min(9).max(14)
+    }),
+    image: yup.object().shape({
+        image: yup.mixed().required('Image file is required!')
+    }),
+}
