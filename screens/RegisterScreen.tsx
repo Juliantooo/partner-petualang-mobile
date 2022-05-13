@@ -7,41 +7,36 @@ import AuthForm from '../components/AuthForm';
 import { IAuthValues } from '../libs/interfaces';
 import { ROUTES_NAME } from '../libs/router';
 import { FormikHelpers } from 'formik';
-import { useDisclose } from 'native-base';
-import Notification from '../components/Notification';
-import { statusNotification } from '../libs/notification';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { authRegister } from '../services/user';
+import notification from '../libs/notification';
 
 const FORM_HEADER = {
     title: 'Daftar',
     action: 'Masuk'
 }
 const REGISTER_SUCCESS_MESSAGE = 'Berhasil mendaftarkan akun baru!'
+const REGISTER_ERROR_MESSAGE = 'Gagal mendaftarkan akun baru!'
 
 export default function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>) {
 
     const { authValues } = useAuth();
-    const { isOpen, onOpen, onClose } = useDisclose()
 
     const handleClickChangeAuth = () => {
         navigation.navigate(ROUTES_NAME.LOGIN);
     }
 
     const handleSubmit = async (values: IAuthValues, actions: FormikHelpers<any>) => {
-        const auth = getAuth();
-        await createUserWithEmailAndPassword(auth, values.email, values.password)
-            .then((userCredential: any) => {
-                console.log(userCredential)
-                const user = userCredential.user
-                console.log(user)
-                onOpen()
-            }).catch(() => {
+        await authRegister({ email: values.email, password: values.password })
+            .catch(() => {
                 actions.setSubmitting(false)
+                notification.error(REGISTER_ERROR_MESSAGE);
             })
             .finally(() => {
                 actions.setSubmitting(false)
                 actions.resetForm()
             })
+
+        notification.success(REGISTER_SUCCESS_MESSAGE);
     }
 
     return (
@@ -54,15 +49,6 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
                 handleClickChangeAuth={handleClickChangeAuth}
                 handleSubmit={handleSubmit}
             />
-            {
-                isOpen &&
-                <Notification
-                    status={statusNotification.SUCCESS}
-                    text={REGISTER_SUCCESS_MESSAGE}
-                    isOpen={isOpen}
-                    onClose={onClose}
-                />
-            }
         </View >
     );
 }
