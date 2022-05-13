@@ -3,23 +3,28 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
-
-import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import LoginScreen from '../screens/LoginScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { RootStackParamList, RootStackScreenProps, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import EditUserScreen from '../screens/EditUserScreen';
+import { Box, Flex, HStack, Input, InputGroup, InputLeftAddon, Stack as NativeBaseStack } from 'native-base';
+import WishListScreen from '../screens/WishListScreen';
+import DetailItemScreen from '../screens/DetailItemScreen';
+import CartIconSection from '../components/CartIcon';
+import CartScreen from '../screens/CartScreen';
+import CheckoutScreen from '../screens/CheckoutScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -42,8 +47,91 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
-      <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
+      <Stack.Screen name="Login" component={LoginScreen}
+        options={({ navigation }: RootStackScreenProps<'Login'>) => ({
+          title: 'Masuk',
+          headerTintColor: '#fff',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: '#10b981',
+          },
+          headerTitleStyle: {
+            display: 'none'
+          },
+        })}
+      />
+      <Stack.Screen name="Register" component={RegisterScreen}
+        options={({ navigation }: RootStackScreenProps<'Register'>) => ({
+          title: 'Buat Akun',
+          headerTintColor: '#fff',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: '#10b981',
+          },
+          headerTitleStyle: {
+            display: 'none'
+          },
+        })}
+      />
+      <Stack.Screen name="EditUser" component={EditUserScreen}
+        options={({ navigation }: RootStackScreenProps<'EditUser'>) => ({
+          title: 'Edit Biodata',
+          headerTintColor: '#fff',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: '#10b981',
+          },
+          headerTitleStyle: {
+            display: 'none'
+          },
+        })}
+      />
+      <Stack.Screen name="DetailItem" component={DetailItemScreen}
+        options={({ navigation }: RootStackScreenProps<'DetailItem'>) => ({
+          title: '',
+          headerTintColor: '#fff',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: '#10b981',
+          },
+          headerTitleStyle: {
+            display: 'none'
+          },
+          headerRight: () => (
+            <CartIconSection navigation={navigation} />
+          ),
+        })} />
+      <Stack.Screen name="Cart" component={CartScreen} options={({ navigation }: RootStackScreenProps<'Cart'>) => ({
+        title: 'Keranjang',
+        headerTintColor: '#fff',
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: '#10b981',
+        },
+        headerTitleStyle: {
+          display: 'none'
+        },
+        headerRight: () => (
+          <Pressable onPress={() => navigation.navigate('WishList')}>
+            <Ionicons
+              name='heart-outline'
+              color='#fff'
+              size={28}
+            />
+          </Pressable>
+        ),
+      })} />
+      <Stack.Screen name="Checkout" component={CheckoutScreen} options={({ navigation }: RootStackScreenProps<'Checkout'>) => ({
+        title: 'Pengiriman',
+        headerTintColor: '#fff',
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: '#10b981',
+        },
+        headerTitleStyle: {
+          display: 'none'
+        },
+      })} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
@@ -64,37 +152,117 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: '#10b981',
+        headerTintColor: '#10b981',
+        tabBarStyle: {
+          backgroundColor: '#fff',
+        },
+        headerStyle: {
+          backgroundColor: '#fff',
+        }
       }}>
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
         options={({ navigation }: RootTabScreenProps<'Home'>) => ({
-          title: 'Home',
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          headerTintColor: '#fff',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: '#10b981',
+          },
+          headerTitleStyle: {
+            display: 'none'
+          },
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} size={23} />,
           headerRight: () => (
+            <Flex justifyContent='space-between' flexDirection='row' alignItems='center' w='full'>
+              <Input
+                type='text'
+                w='80%'
+                defaultValue=""
+                name='search'
+                placeholder="Cari tas mendaki..."
+                value=''
+                InputLeftElement={
+                  <Ionicons
+                    name="search-outline"
+                    size={20}
+                    color='#fff'
+                    style={{ marginLeft: 10 }}
+                  />
+                }
+                variant='outline'
+                borderColor='#fff'
+                placeholderTextColor='#fff'
+                _focus={{
+                  borderColor: '#fff'
+                }}
+                h='4/5'
+                my='auto'
+              />
+              <CartIconSection navigation={navigation} />
+            </Flex>
+          ),
+        })}
+      />
+      <BottomTab.Screen
+        name="WishList"
+        component={WishListScreen}
+        options={({ navigation }: RootTabScreenProps<'WishList'>) => ({
+          headerTitleStyle: {
+            display: 'none'
+          },
+          headerTintColor: '#fff',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: '#10b981',
+          },
+          tabBarLabel: 'Wishlist',
+          tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} size={23} />,
+          headerLeft: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => navigation.goBack()}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
+              <Ionicons
+                name="arrow-back-outline"
+                size={30}
+                color='#fff'
+                style={{ marginLeft: 15 }}
               />
             </Pressable>
-          ),
+          )
         })}
       />
       <BottomTab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-        }}
+        options={({ navigation }: RootTabScreenProps<'Profile'>) => ({
+          headerTitleStyle: {
+            display: 'none'
+          },
+          headerTintColor: '#fff',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: '#10b981',
+          },
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} size={23} />,
+          headerLeft: () => (
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+              <Ionicons
+                name="arrow-back-outline"
+                size={30}
+                color='#fff'
+                style={{ marginLeft: 15 }}
+              />
+            </Pressable>
+          )
+        })}
       />
     </BottomTab.Navigator>
   );
