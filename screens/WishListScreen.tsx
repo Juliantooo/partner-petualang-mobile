@@ -7,6 +7,7 @@ import useCartItems from "../hooks/useCartItems";
 import notification from "../libs/notification";
 import useAuth from "../hooks/useAuth";
 import { ROUTES_NAME } from "../libs/router";
+import { IItem, IWishlistItem } from "../libs/interfaces";
 
 
 
@@ -21,7 +22,7 @@ export default function WishListScreen({ navigation }: RootTabScreenProps<'WishL
             notification.error('Anda belum masuk ke akun anda!');
             return navigation.navigate(ROUTES_NAME.LOGIN)
         }
-        const item = wishlistItems.find((item) => item.id === id);
+        const item: IWishlistItem = wishlistItems.find((item) => item.id === id)!;
         notification.success('Berhasil menambahkan ke keranjang');
         if (isItemAlreadyInCart(id)) return addCartItemCount(id);
 
@@ -40,7 +41,7 @@ export default function WishListScreen({ navigation }: RootTabScreenProps<'WishL
                     <VStack space='4'>
                         {
                             wishlistItems.length > 0 ?
-                                wishlistItems.map((item) => (
+                                wishlistItems.map((item: IItem) => (
                                     <WishListCard
                                         key={item.id}
                                         id={item.id}
