@@ -25,6 +25,9 @@ import DetailItemScreen from '../screens/DetailItemScreen';
 import CartIconSection from '../components/CartIcon';
 import CartScreen from '../screens/CartScreen';
 import CheckoutScreen from '../screens/CheckoutScreen';
+import { StackScreenStatusBarOptions } from '../libs/statusBar';
+import OrderSuccessScreen from '../screens/OrderSuccessScreen';
+import OrderDetailScreen from '../screens/OrderDetailScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -48,69 +51,25 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="Login" component={LoginScreen}
-        options={({ navigation }: RootStackScreenProps<'Login'>) => ({
-          title: 'Masuk',
-          headerTintColor: '#fff',
-          headerShadowVisible: false,
-          headerStyle: {
-            backgroundColor: '#10b981',
-          },
-          headerTitleStyle: {
-            display: 'none'
-          },
-        })}
+        options={({ navigation }: RootStackScreenProps<'Login'>) => (StackScreenStatusBarOptions({ title: 'Masuk' }))}
       />
       <Stack.Screen name="Register" component={RegisterScreen}
-        options={({ navigation }: RootStackScreenProps<'Register'>) => ({
-          title: 'Buat Akun',
-          headerTintColor: '#fff',
-          headerShadowVisible: false,
-          headerStyle: {
-            backgroundColor: '#10b981',
-          },
-          headerTitleStyle: {
-            display: 'none'
-          },
-        })}
+        options={({ navigation }: RootStackScreenProps<'Register'>) => (StackScreenStatusBarOptions({ title: 'Buat Akun' }))}
       />
       <Stack.Screen name="EditUser" component={EditUserScreen}
-        options={({ navigation }: RootStackScreenProps<'EditUser'>) => ({
-          title: 'Edit Biodata',
-          headerTintColor: '#fff',
-          headerShadowVisible: false,
-          headerStyle: {
-            backgroundColor: '#10b981',
-          },
-          headerTitleStyle: {
-            display: 'none'
-          },
-        })}
+        options={({ navigation }: RootStackScreenProps<'EditUser'>) => (StackScreenStatusBarOptions({}))}
       />
       <Stack.Screen name="DetailItem" component={DetailItemScreen}
-        options={({ navigation }: RootStackScreenProps<'DetailItem'>) => ({
-          title: '',
-          headerTintColor: '#fff',
-          headerShadowVisible: false,
-          headerStyle: {
-            backgroundColor: '#10b981',
-          },
-          headerTitleStyle: {
-            display: 'none'
-          },
-          headerRight: () => (
-            <CartIconSection navigation={navigation} />
-          ),
-        })} />
-      <Stack.Screen name="Cart" component={CartScreen} options={({ navigation }: RootStackScreenProps<'Cart'>) => ({
+        options={({ navigation }: RootStackScreenProps<'DetailItem'>) => (StackScreenStatusBarOptions(
+          {
+            headerBackgroundColor: '#10b981',
+            headerRight: () => (
+              <CartIconSection navigation={navigation} />
+            ),
+          }
+        ))} />
+      <Stack.Screen name="Cart" component={CartScreen} options={({ navigation }: RootStackScreenProps<'Cart'>) => (StackScreenStatusBarOptions({
         title: 'Keranjang',
-        headerTintColor: '#fff',
-        headerShadowVisible: false,
-        headerStyle: {
-          backgroundColor: '#10b981',
-        },
-        headerTitleStyle: {
-          display: 'none'
-        },
         headerRight: () => (
           <Pressable onPress={() => navigation.navigate('WishList')}>
             <Ionicons
@@ -119,19 +78,17 @@ function RootNavigator() {
               size={28}
             />
           </Pressable>
-        ),
-      })} />
-      <Stack.Screen name="Checkout" component={CheckoutScreen} options={({ navigation }: RootStackScreenProps<'Checkout'>) => ({
-        title: 'Pengiriman',
-        headerTintColor: '#fff',
-        headerShadowVisible: false,
-        headerStyle: {
-          backgroundColor: '#10b981',
-        },
-        headerTitleStyle: {
-          display: 'none'
-        },
-      })} />
+        )
+      }))} />
+      <Stack.Screen name="Checkout" component={CheckoutScreen} options={({ navigation }: RootStackScreenProps<'Checkout'>) => (StackScreenStatusBarOptions({
+        title: 'Pengiriman'
+      }))} />
+      <Stack.Screen name="OrderSuccess" component={OrderSuccessScreen} options={({ navigation }: RootStackScreenProps<'OrderSuccess'>) => (StackScreenStatusBarOptions({
+        title: 'Sewa Barang Berhasil'
+      }))} />
+      <Stack.Screen name="OrderDetail" component={OrderDetailScreen} options={({ navigation }: RootStackScreenProps<'OrderDetail'>) => (StackScreenStatusBarOptions({
+        title: 'Detail Penyewaan'
+      }))} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
