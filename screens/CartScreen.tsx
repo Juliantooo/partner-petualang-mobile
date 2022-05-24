@@ -3,8 +3,9 @@ import { RootStackScreenProps } from "../types";
 import useCartItems from "../hooks/useCartItems";
 import CartItemCard from "../components/CartItemCard";
 
-import EmptyCart from '../assets/images/empty-cart.png'
+import EmptyCart from '../assets/images/empty-cart.png';
 import useOrderItems from "../hooks/useOrderItems";
+import { ICartItem } from "../libs/interfaces";
 
 
 export default function CartScreen({ navigation }: RootStackScreenProps<'Cart'>) {
@@ -34,7 +35,7 @@ export default function CartScreen({ navigation }: RootStackScreenProps<'Cart'>)
     }
 
     const handlePressCheckout = () => {
-        setOrderItems(selectedItemsForOrder);
+        setOrderItems({ items: selectedItemsForOrder });
         navigation.navigate('Checkout');
     }
 
@@ -67,7 +68,7 @@ export default function CartScreen({ navigation }: RootStackScreenProps<'Cart'>)
                         <ScrollView key={selectedItemsForOrder} mb='20'>
                             <VStack>
                                 {
-                                    cartItems.map((item) => (
+                                    cartItems.map((item: ICartItem) => (
                                         <CartItemCard
                                             key={item.id}
                                             id={item.id}
