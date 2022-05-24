@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import sellItemsSlice from './slicers/sellItems'
 import userSlice from './slicers/user'
-import whishlistItemsSlice from './slicers/whishlist'
+import wishlistItemsSlice from './slicers/whishlist'
 import cartItemsSlice from './slicers/cartItems'
 import orderItemsSlice from './slicers/orderItems'
 
@@ -9,7 +9,7 @@ export const store = configureStore({
     reducer: {
         user: userSlice,
         sellItems: sellItemsSlice,
-        wishlistItem: whishlistItemsSlice,
+        wishlistItem: wishlistItemsSlice,
         cartItems: cartItemsSlice,
         orderItems: orderItemsSlice
     },
