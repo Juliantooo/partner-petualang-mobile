@@ -86,7 +86,6 @@ export const updateCartItemsUser = async (cartItems: Array<ICartItem>, id: strin
 }
 export const updateOrdersHistoryUser = async (ordersHistory: Array<ICartItem>, id: string) => {
     const userRef = doc(db, 'users', id);
-    console.log('asasasasas')
     const response = await updateDoc(userRef, { ordersHistory }).then(async () => {
         const userData = await getUserData(id)
         return userData
