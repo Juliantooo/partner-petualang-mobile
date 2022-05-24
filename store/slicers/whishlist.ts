@@ -1,31 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { IWishlistItem } from '../../libs/interfaces'
 
-
-const initialState = {
-    whishlistItems: [],
+interface IInitialState {
+    wishlistItems: Array<IWishlistItem>
 }
 
-export const whishlistItemsSlice = createSlice({
-    name: 'whishlistItems',
+const initialState: IInitialState = {
+    wishlistItems: [],
+}
+
+export const wishlistItemsSlice = createSlice({
+    name: 'wishlistItems',
     initialState,
     reducers: {
-        ADD_WISH_LIST_ITEM: (state, action: PayloadAction<any>) => {
+        SET_WISH_LIST_ITEMS: (state, action: PayloadAction<IWishlistItem[]>) => {
             return {
                 ...state,
-                whishlistItems: [action.payload, ...state.whishlistItems]
+                wishlistItems: action.payload
             }
         },
-        REMOVE_WISH_LIST_ITEM: (state, action: PayloadAction<any>) => {
-            const newWishListItems = state.whishlistItems.filter((item) => item.id !== action.payload)
+        ADD_WISH_LIST_ITEM: (state, action: PayloadAction<IWishlistItem>) => {
             return {
                 ...state,
-                whishlistItems: newWishListItems
+                wishlistItems: [action.payload, ...state.wishlistItems]
+            }
+        },
+        REMOVE_WISH_LIST_ITEM: (state, action: PayloadAction<string>) => {
+            const newWishListItems = state.wishlistItems.filter((item: IWishlistItem) => item.id !== action.payload)
+            return {
+                ...state,
+                wishlistItems: newWishListItems
             }
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { ADD_WISH_LIST_ITEM, REMOVE_WISH_LIST_ITEM } = whishlistItemsSlice.actions
+export const { SET_WISH_LIST_ITEMS, ADD_WISH_LIST_ITEM, REMOVE_WISH_LIST_ITEM } = wishlistItemsSlice.actions
 
-export default whishlistItemsSlice.reducer
+export default wishlistItemsSlice.reducer
