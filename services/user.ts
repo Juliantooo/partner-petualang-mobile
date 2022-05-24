@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { IAuthValues, IUserDataProps } from "../libs/interfaces";
+import { IAuthValues, ICartItem, IUserData, IWishlistItem } from "../libs/interfaces";
 
 const auth = getAuth();
 
@@ -9,7 +9,7 @@ export const authRegister = async ({ email, password }: IAuthValues) => {
     const response = await createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential: any) => {
             const user = userCredential.user
-            const userData: IUserDataProps = {
+            const userData: IUserData = {
                 email,
                 password,
                 id: user.uid,
@@ -63,6 +63,38 @@ export const updateUser = async (data: any, id: string) => {
 
 }
 
+export const updateWishlistUser = async (wishlistItems: Array<IWishlistItem>, id: string) => {
+    const userRef = doc(db, 'users', id)
+
+    const response = await updateDoc(userRef, { wishlistItems }).then(async () => {
+        const userData = await getUserData(id)
+        return userData
+    })
+    return response
+
+}
+
+export const updateCartItemsUser = async (cartItems: Array<ICartItem>, id: string) => {
+    const userRef = doc(db, 'users', id)
+
+    const response = await updateDoc(userRef, { cartItems }).then(async () => {
+        const userData = await getUserData(id)
+        return userData
+    })
+    return response
+
+}
+export const updateOrdersHistoryUser = async (ordersHistory: Array<ICartItem>, id: string) => {
+    const userRef = doc(db, 'users', id);
+    console.log('asasasasas')
+    const response = await updateDoc(userRef, { ordersHistory }).then(async () => {
+        const userData = await getUserData(id)
+        return userData
+    })
+
+    return response
+}
+
 export const userLogout = async () => {
 
     const response = await signOut(auth).then(() => {
@@ -71,3 +103,4 @@ export const userLogout = async () => {
 
     return response
 }
+
