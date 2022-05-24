@@ -20,7 +20,6 @@ export const cartItemsSlice = createSlice({
             }
         },
         SET_CART_ITEMS: (state, action: PayloadAction<ICartItem[]>) => {
-            console.log(action.payload)
             return {
                 ...state,
                 cartItems: action.payload
