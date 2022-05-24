@@ -26,7 +26,7 @@ export default function ({ navigation, route }: any) {
         [data.key]: data.value
     }
 
-    const handleSubmit = async (values, action) => {
+    const handleSubmit = async (values: string, action: any) => {
         const response = await updateUser(values, idUser)
         notification.success(`Berhasil update profile`);
         dispatch(SET_USER_DATA(response))
