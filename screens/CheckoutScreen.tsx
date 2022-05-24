@@ -75,8 +75,7 @@ export default function CheckoutScreen({ navigation }: RootStackScreenProps<'Che
             setOrdersHistory(newOrdersHistory);
             updateOrdersHistoryUser(newOrdersHistory, userData.id);
             navigation.replace('OrderSuccess');
-        }).catch((e) => {
-            console.log(e)
+        }).catch(() => {
             notification.error('Gagal sewa barang!, Silahkan coba lagi.')
         }).finally(() => {
             setIsLoading(false)
