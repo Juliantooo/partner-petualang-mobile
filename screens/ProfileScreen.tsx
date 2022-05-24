@@ -9,7 +9,10 @@ import notification from '../libs/notification';
 import { ROUTES_NAME } from '../libs/router';
 import { userDataValidationSchema } from '../libs/validation';
 import { userLogout } from '../services/user';
+import { SET_CART_ITEMS } from '../store/slicers/cartItems';
+import { SET_ORDER_HISTORY } from '../store/slicers/orderItems';
 import { SET_AUTH_TOKEN, SET_USER_DATA } from '../store/slicers/user';
+import { SET_WISH_LIST_ITEMS } from '../store/slicers/whishlist';
 import { RootTabScreenProps } from '../types';
 
 export default function ProfileScreen({ navigation }: RootTabScreenProps<'Profile'>) {
@@ -30,7 +33,10 @@ export default function ProfileScreen({ navigation }: RootTabScreenProps<'Profil
       phone: '',
       image: ''
     }))
-    dispatch(SET_AUTH_TOKEN(''))
+    dispatch(SET_AUTH_TOKEN(''));
+    dispatch(SET_CART_ITEMS([]));
+    dispatch(SET_WISH_LIST_ITEMS([]));
+    dispatch(SET_ORDER_HISTORY([]));
     notification.success(`Berhasil keluar dari akun`);
     if (isSuccessLogout) return navigation.navigate('Home')
   }
