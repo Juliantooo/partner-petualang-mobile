@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { IItem } from '../../libs/interfaces'
 
+interface IInitialState {
+    sellItems: Array<IItem>
+}
 
-const initialState = {
+const initialState: IInitialState = {
     sellItems: [],
 }
 
@@ -9,7 +13,7 @@ export const sellItemsSlice = createSlice({
     name: 'sellItems',
     initialState,
     reducers: {
-        SET_SELL_ITEMS: (state, action: PayloadAction<any>) => {
+        SET_SELL_ITEMS: (state, action: PayloadAction<IItem[]>) => {
             return {
                 ...state,
                 sellItems: action.payload
