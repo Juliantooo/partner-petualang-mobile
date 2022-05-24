@@ -20,9 +20,13 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   EditUser: undefined;
-  DetailItem: undefined;
+  DetailItem: {
+    id: string
+  };
   Cart: undefined;
-  Checkout: undefined
+  Checkout: undefined;
+  OrderSuccess: undefined;
+  OrderDetail: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
