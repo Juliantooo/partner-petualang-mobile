@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ICartItem } from '../../libs/interfaces'
 
+interface IInitialState {
+    cartItems: Array<ICartItem>
+}
 
-const initialState = {
+const initialState: IInitialState = {
     cartItems: [],
 }
 
@@ -9,32 +13,39 @@ export const cartItemsSlice = createSlice({
     name: 'cartItems',
     initialState,
     reducers: {
-        ADD_CART_ITEM: (state, action: PayloadAction<any>) => {
+        ADD_CART_ITEM: (state, action: PayloadAction<ICartItem>) => {
             return {
                 ...state,
                 cartItems: [action.payload, ...state.cartItems]
             }
         },
-        REMOVE_CART_ITEM: (state, action: PayloadAction<any>) => {
-            const newWishListItems = state.cartItems.filter((item) => item.id !== action.payload)
+        SET_CART_ITEMS: (state, action: PayloadAction<ICartItem[]>) => {
+            console.log(action.payload)
+            return {
+                ...state,
+                cartItems: action.payload
+            }
+        },
+        REMOVE_CART_ITEM: (state, action: PayloadAction<string>) => {
+            const newWishListItems = state.cartItems.filter((item: ICartItem) => item.id !== action.payload)
             return {
                 ...state,
                 cartItems: newWishListItems
             }
         },
         SUBTRACT_CART_ITEM: (state, action: PayloadAction<any>) => {
-            const item = state.cartItems.find((item) => item.id === action.payload);
-            item.count -= 1;
+            const item: ICartItem = state.cartItems.find((item: ICartItem) => item.id === action.payload)!;
+            if (item.count) item.count -= 1;
             return state;
         },
         ADD_CART_ITEM_COUNT: (state, action: PayloadAction<any>) => {
-            const item = state.cartItems.find((item) => item.id === action.payload);
-            item.count += 1;
+            const item: ICartItem = state.cartItems.find((item: ICartItem) => item.id === action.payload)!;
+            if (item.count) item.count += 1;
             return state;
         },
         SET_CART_ITEM_COUNT: (state, action: PayloadAction<any>) => {
-            const item = state.cartItems.find((item) => item.id === action.payload.id);
-            item.count = action.payload.count;
+            const item: ICartItem = state.cartItems.find((item: ICartItem) => item.id === action.payload.id)!;
+            if (item.count) item.count = action.payload.count;
             return state;
         }
     },
@@ -43,6 +54,7 @@ export const cartItemsSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
     ADD_CART_ITEM,
+    SET_CART_ITEMS,
     REMOVE_CART_ITEM,
     SUBTRACT_CART_ITEM,
     ADD_CART_ITEM_COUNT,
