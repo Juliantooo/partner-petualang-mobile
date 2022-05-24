@@ -1,25 +1,29 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ICartItem, IOrderItem } from "../libs/interfaces";
 import notification from "../libs/notification";
+import { updateCartItemsUser } from "../services/user";
 import { RootState } from "../store";
-import { ADD_CART_ITEM, ADD_CART_ITEM_COUNT, REMOVE_CART_ITEM, SET_CART_ITEM_COUNT, SUBTRACT_CART_ITEM } from "../store/slicers/cartItems";
+import { ADD_CART_ITEM, ADD_CART_ITEM_COUNT, REMOVE_CART_ITEM, SET_CART_ITEMS, SET_CART_ITEM_COUNT, SUBTRACT_CART_ITEM } from "../store/slicers/cartItems";
+import useAuth from "./useAuth";
 
 
 const useCartItems = () => {
 
     const dispatch = useDispatch();
 
+    const { userData } = useAuth();
     const cartItems = useSelector((state: RootState) => state.cartItems.cartItems);
     const [cartItemsTotalPayment, setCartItemsTotalPayment] = useState<number>(0);
     const [itemsCount, setItemsCount] = useState<number>(0);
     const [cartItemsCount, setCartItemsCount] = useState<number>(0);
     const [cartItemsDiscount, setCartItemsDiscount] = useState<number>(0);
-    const [selectedItemsForOrder, setSelectedItemsForOrder] = useState<any>([]);
+    const [selectedItemsForOrder, setSelectedItemsForOrder] = useState<IOrderItem[]>([]);
 
-    const findItemWithId = (id: string) => cartItems.find((item) => item.id === id);
-    const filterItemsWithId = (id: string, items: any) => items.filter((item) => item.id !== id);
+    const findItemWithId = (id: string) => cartItems.find((item: ICartItem) => item.id === id);
+    const filterItemsWithId = (id: string, items: any) => items.filter((item: ICartItem) => item.id !== id);
 
-    const addItemToCart = (item: any) => {
+    const addItemToCart = (item: ICartItem) => {
         const cartItem = {
             ...item,
             count: 1,
@@ -29,13 +33,17 @@ const useCartItems = () => {
         notification.success(`Berhasil menambahkan ke keranjang`);
     }
 
+    const setCartItems = (items: Array<ICartItem>) => {
+        dispatch(SET_CART_ITEMS(items))
+    }
+
     const removeItemFromCart = (id: string) => {
         dispatch(REMOVE_CART_ITEM(id))
         notification.success(`Berhasil menghapus item`);
     }
 
     const addCartItemCount = (id: string) => {
-        const item = findItemWithId(id);
+        const item: ICartItem = findItemWithId(id)!;
         if (item.count === item.stock) return notification.error('Jumlah barang melebihi stock barang');
         dispatch(ADD_CART_ITEM_COUNT(id));
     }
@@ -46,30 +54,30 @@ const useCartItems = () => {
     }
 
     const subtractCartItemCount = (id: string) => {
-        const item = findItemWithId(id);
+        const item: ICartItem = findItemWithId(id)!;
         if (item.count === 1) return notification.error('Minimal jumlah peminjaman 1 barang');
         dispatch(SUBTRACT_CART_ITEM(id))
     }
 
     const calculateTotalPayment = async () => {
-        const discount = selectedItemsForOrder.reduce((result, item) => (result + (item.price * item.count * (item.discount / 100))), 0);
-        const totalPayment = selectedItemsForOrder.reduce((result, item) => (result + (item.price * item.count)), 0)
+        const discount = selectedItemsForOrder.reduce((result: number, item: ICartItem) => (result + (item.price! * item.count! * (item.discount! / 100))), 0);
+        const totalPayment = selectedItemsForOrder.reduce((result: number, item: ICartItem) => (result + (item.price! * item.count!)), 0)
 
         setCartItemsDiscount(discount)
         setCartItemsTotalPayment(totalPayment - discount)
     }
 
     const calculateItemsCount = () => {
-        const count = selectedItemsForOrder.reduce((result, item) => (result + item.count), 0);
+        const count = selectedItemsForOrder.reduce((result, item) => (result + item.count!), 0);
         setItemsCount(count)
     }
 
     const isItemAlreadyInCart = (id: string) => {
-        return cartItems.some((item) => item.id === id);
+        return cartItems.some((item: ICartItem) => item.id === id);
     }
 
     const addItemToSelectedItemForOrder = (id: string) => {
-        const item = findItemWithId(id);
+        const item: ICartItem = findItemWithId(id)!;
         setSelectedItemsForOrder([...selectedItemsForOrder, item])
     }
 
@@ -87,7 +95,7 @@ const useCartItems = () => {
     }
 
     const isSelectedItemForOrderContainThisItem = (id: string) => {
-        return selectedItemsForOrder.some((item) => item.id === id);
+        return selectedItemsForOrder.some((item: IOrderItem) => item.id === id);
     }
 
     useEffect(() => {
@@ -97,6 +105,7 @@ const useCartItems = () => {
 
     useEffect(() => {
         setCartItemsCount(cartItems.length);
+        updateCartItemsUser(cartItems, userData.id);
     }, [cartItems])
 
 
@@ -110,6 +119,7 @@ const useCartItems = () => {
 
         findItemWithId,
         addItemToCart,
+        setCartItems,
         subtractCartItemCount,
         removeItemFromCart,
         isItemAlreadyInCart,
