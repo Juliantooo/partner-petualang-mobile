@@ -5,12 +5,15 @@ import { useDispatch } from 'react-redux';
 import AuthForm from '../components/AuthForm';
 import { View } from '../components/Themed';
 import useAuth from '../hooks/useAuth';
-import { IAuthValues } from '../libs/interfaces';
+import { IAuthValues, IUserData } from '../libs/interfaces';
 import notification from '../libs/notification';
 import { ROUTES_NAME } from '../libs/router';
 import { atuhValidationSchema } from '../libs/validation';
 import { authLogin, getUserData } from '../services/user';
+import { SET_CART_ITEMS } from '../store/slicers/cartItems';
+import { SET_ORDER_HISTORY } from '../store/slicers/orderItems';
 import { SET_AUTH_TOKEN, SET_USER_DATA } from '../store/slicers/user';
+import { SET_WISH_LIST_ITEMS } from '../store/slicers/whishlist';
 import { RootStackScreenProps } from '../types';
 
 const FORM_HEADER = {
@@ -43,8 +46,21 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
             })
 
         if (Object.keys(userData).length > 0) {
+            const user: IUserData = {
+                email: userData.email,
+                password: userData.password,
+                id: userData.id,
+                address: userData.address,
+                name: userData.name,
+                phone: userData.phone,
+                image: userData.image,
+            }
             dispatch(SET_AUTH_TOKEN(response.stsTokenManager.accessToken));
-            dispatch(SET_USER_DATA(userData));
+            dispatch(SET_USER_DATA(user));
+            if (userData.cartItems) dispatch(SET_CART_ITEMS(userData.cartItems))
+            if (userData.wishlistItems) dispatch(SET_WISH_LIST_ITEMS(userData.wishlistItems))
+            if (userData.ordersHistory) dispatch(SET_ORDER_HISTORY(userData.ordersHistory))
+
             notification.success('Berhasil masuk ke akun!')
             navigation.goBack();
         }
