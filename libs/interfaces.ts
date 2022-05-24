@@ -37,3 +37,47 @@ export interface IUserData extends IAuthValues {
     address: string,
     image: string,
 }
+
+export interface IItem {
+    id?: string,
+    category?: string,
+    description?: string,
+    discount?: number,
+    image?: string,
+    name?: string,
+    price?: number,
+    rented?: number,
+    stock?: number,
+}
+
+export type IWishlistItem = IItem
+
+export interface ICartItem extends IItem {
+    note?: string,
+    count?: number
+}
+
+export type IOrderItem = ICartItem
+
+export interface IUser {
+    address?: 'string',
+    email?: 'string',
+    id?: 'string',
+    image?: 'string',
+    name?: 'string',
+    password?: 'string',
+    phone?: 'string',
+}
+
+export interface IOrder {
+    id?: string,
+    deliveryMethod?: string,
+    paymentMethod?: string,
+    status?: string,
+    discountAmount?: number,
+    totalPayment?: string,
+    user?: IUser,
+    items?: Array<IOrderItem>
+}
+
+
