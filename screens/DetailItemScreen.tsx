@@ -2,28 +2,29 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Box, Button, HStack, Image, Pressable, ScrollView, Text, VStack } from "native-base";
 import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ReviewBox from "../components/ReviewBox";
 import useAuth from "../hooks/useAuth";
 import useCartItems from "../hooks/useCartItems";
 import useWishlistItems from "../hooks/useWishlistItems";
+import { IItem } from "../libs/interfaces";
 import notification from "../libs/notification";
 import { ROUTES_NAME } from "../libs/router";
 import { RootState } from "../store";
-import { RootStackParamList } from "../types";
+import { RootStackScreenProps } from "../types";
 
 
-export default function DetailItemScreen({ navigation, route }: RootStackParamList<'DetailItem'>) {
+export default function DetailItemScreen({ navigation, route }: RootStackScreenProps<'DetailItem'>) {
 
     const items = useSelector((state: RootState) => state.sellItems.sellItems);
     const { addItemToCart, isItemAlreadyInCart, addCartItemCount } = useCartItems();
     const { isLogin } = useAuth();
     const { addItemToWishlist, removeItemFromWishlist, isWishlistItem } = useWishlistItems();
-    const [detailItem, setDetailItem] = useState<any>({});
+    const [detailItem, setDetailItem] = useState<IItem>({});
     const { id } = route.params
 
     const getDetailItem = () => {
-        const item = items.find((i) => i.id === id);
+        const item = items.find((itemData: IItem) => itemData.id === id)!;
         setDetailItem(item)
     }
 
@@ -50,9 +51,15 @@ export default function DetailItemScreen({ navigation, route }: RootStackParamLi
             notification.error('Anda belum masuk ke akun anda!');
             return navigation.navigate(ROUTES_NAME.LOGIN);
         }
-        addItemToCart(detailItem);
-        notification.success(`Berhasil menambahkan ke keranjang`);
-        navigation.navigate('Cart')
+
+        if (isItemAlreadyInCart(id)) {
+            addCartItemCount(id);
+            notification.success(`Berhasil menambahkan ke keranjang`);
+        } else {
+            addItemToCart(detailItem);
+        }
+
+        navigation.navigate('Cart');
     }
 
     useEffect(() => {
