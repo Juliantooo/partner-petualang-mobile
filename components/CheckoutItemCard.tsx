@@ -4,7 +4,7 @@ import { Box, HStack, Image, Text, VStack } from 'native-base'
 const CheckoutItemCard = ({ image, name, price, discount, count, note }: any) => {
 
     return (
-        <Box px='3' py='2' backgroundColor='white'>
+        <Box px='2' py='2' backgroundColor='white' rounded='sm'>
             <VStack space='4'>
                 <HStack space='4'>
                     <Image rounded='sm' src={image} alt='image-item' w='20' style={{ aspectRatio: 1, resizeMode: 'cover' }} />
