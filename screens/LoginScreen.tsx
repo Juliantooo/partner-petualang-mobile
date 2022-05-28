@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import AuthForm from '../components/AuthForm';
 import { View } from '../components/Themed';
 import useAuth from '../hooks/useAuth';
-import { IAuthValues, IUserData } from '../libs/interfaces';
+import { IAuthValues, IUser } from '../libs/interfaces';
 import notification from '../libs/notification';
 import { ROUTES_NAME } from '../libs/router';
 import { atuhValidationSchema } from '../libs/validation';
@@ -34,19 +34,19 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
     }
 
     const handleSubmit = async (values: IAuthValues, actions: FormikHelpers<any>) => {
-        const response = await authLogin({ email: values.email, password: values.password }).catch(() => {
+        const response: any = await authLogin({ email: values.email, password: values.password }).catch(() => {
             actions.setSubmitting(false);
             notification.error(LOGIN_ERROR_MESSAGE);
         })
 
-        const userData = await getUserData(response.uid)
+        const userData: any = await getUserData(response.uid)
             .finally(() => {
                 actions.setSubmitting(false)
                 actions.resetForm()
             })
 
         if (Object.keys(userData).length > 0) {
-            const user: IUserData = {
+            const user: IUser = {
                 email: userData.email,
                 password: userData.password,
                 id: userData.id,
@@ -61,7 +61,7 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
             if (userData.wishlistItems) dispatch(SET_WISH_LIST_ITEMS(userData.wishlistItems))
             if (userData.ordersHistory) dispatch(SET_ORDER_HISTORY(userData.ordersHistory))
 
-            notification.success('Berhasil masuk ke akun!')
+            notification.success(LOGIN_SUCCESS_MESSAGE)
             navigation.goBack();
         }
     }
