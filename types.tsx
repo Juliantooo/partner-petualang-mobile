@@ -26,7 +26,10 @@ export type RootStackParamList = {
   Cart: undefined;
   Checkout: undefined;
   OrderSuccess: undefined;
-  OrderDetail: undefined;
+  OrderDetail: {
+    idOrder: string
+  };
+  HistoryTransaction: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
