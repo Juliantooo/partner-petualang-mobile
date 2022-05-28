@@ -26,7 +26,7 @@ export const orderItemsSlice = createSlice({
         SET_ORDER: (state, action: PayloadAction<IOrder>) => {
             return {
                 ...state,
-                order: action.payload
+                order: { ...action.payload }
             }
         },
         SET_ORDER_HISTORY: (state, action: PayloadAction<IOrder[]>) => {
