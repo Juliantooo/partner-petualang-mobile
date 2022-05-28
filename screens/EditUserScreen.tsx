@@ -27,9 +27,10 @@ export default function ({ navigation, route }: any) {
     }
 
     const handleSubmit = async (values: string, action: any) => {
-        const response = await updateUser(values, idUser)
+        const response: any = await updateUser(values, idUser)
+        const { id, password, email, address, name, phone, image } = response
         notification.success(`Berhasil update profile`);
-        dispatch(SET_USER_DATA(response))
+        dispatch(SET_USER_DATA({ id, password, email, address, name, phone, image }))
         action.setSubmitting(false)
         action.resetForm()
         navigation.goBack()
