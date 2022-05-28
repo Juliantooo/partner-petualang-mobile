@@ -8,9 +8,10 @@ import { useState, useEffect } from "react";
 import { handleOrderItems } from "../services/order";
 import useLoading from "../hooks/useLoading";
 import notification from "../libs/notification";
-import { ICartItem, IOrderItem } from "../libs/interfaces";
+import { ICartItem, IOrder, IOrderItem } from "../libs/interfaces";
 import useCartItems from "../hooks/useCartItems";
 import { updateOrdersHistoryUser } from "../services/user";
+import dayjs from "dayjs";
 
 const DELIVERY = 'Delivery';
 const DELIVERY_FEE = 7000;
@@ -18,7 +19,7 @@ const DELIVERY_FEE = 7000;
 export default function CheckoutScreen({ navigation }: RootStackScreenProps<'Checkout'>) {
 
     const { cartItems, setCartItems } = useCartItems();
-    const { orderItems, setOrderItems, setOrder, ordersHistory, setOrdersHistory } = useOrderItems();
+    const { orderItems, setOrderItems, setOrder, ordersHistory, setOrdersHistory, order } = useOrderItems();
     const { userData } = useAuth();
     const { isLoading, setIsLoading } = useLoading();
 
@@ -43,8 +44,8 @@ export default function CheckoutScreen({ navigation }: RootStackScreenProps<'Che
     }
 
     const calculateTotalPayment = () => {
-        const payment = orderItems.reduce((result, item: IOrderItem) => result + (item.count! * item.price!), 0);
-        const discount = orderItems.reduce((result, item: IOrderItem) => (result + (item.price! * item.count! * (item.discount! / 100))), 0);
+        const payment = orderItems.reduce((result: number, item: IOrderItem) => result + (item.count! * item.price! * order.daysOfRent), 0);
+        const discount = orderItems.reduce((result: number, item: IOrderItem) => (result + (item.price! * item.count! * (item.discount! / 100))), 0);
         setTotalDiscount(discount);
         if (deliveryMethod === DELIVERY) {
             setTotalPayment(payment + DELIVERY_FEE - discount)
@@ -55,25 +56,30 @@ export default function CheckoutScreen({ navigation }: RootStackScreenProps<'Che
 
     const handlePressOrder = async () => {
         setIsLoading(true)
-        const orderData = {
+        const orderData: IOrder = {
+            id: `${userData.id}-${dayjs().format('DD-MM-YYYY-HH-mm')}`,
             user: userData,
             items: orderItems,
             discountAmount: totalDiscount,
             totalPayment,
             status: 'Diproses',
             paymentMethod,
-            deliveryMethod
+            deliveryMethod,
+            daysOfRent: order.daysOfRent,
+            startRentDate: order.startRentDate,
+            endRentDate: order.endRentDate,
+            orderDate: dayjs().format('DD-MM-YYYY HH:mm')
         }
         await handleOrderItems(orderData).then(() => {
             setOrder(orderData);
             const arrayOfIdOrderItems: Array<string> = orderItems.map((item: IOrderItem) => item.id);
-            const newCartItems: Array<ICartItem> = cartItems.filter((item: ICartItem) => !arrayOfIdOrderItems.includes(item.id));
+            const newCartItems: Array<ICartItem> = cartItems.filter((item: ICartItem) => !arrayOfIdOrderItems.includes(item.id!));
             setOrderItems({ items: [], isShowNotification: false });
             notification.success('Berhasil sewa barang!');
             setCartItems(newCartItems);
             const newOrdersHistory = [...ordersHistory, orderData];
             setOrdersHistory(newOrdersHistory);
-            updateOrdersHistoryUser(newOrdersHistory, userData.id);
+            updateOrdersHistoryUser(newOrdersHistory, userData.id!);
             navigation.replace('OrderSuccess');
         }).catch(() => {
             notification.error('Gagal sewa barang!, Silahkan coba lagi.')
@@ -114,11 +120,26 @@ export default function CheckoutScreen({ navigation }: RootStackScreenProps<'Che
                 </Box>
                 <Box rounded='lg' borderWidth='0' my='1' px='3' >
                     <Text fontSize='lg' fontWeight='bold' mb='1'>Alamat</Text>
-                    <VStack space='1' px='3' py='2' backgroundColor='white' rounded='sm'>
-                        <Text fontSize='xs'>{`${userData.name} ( ${userData.phone} )`}</Text>
-                        <Text fontSize='xs'>{userData.address}</Text>
-                    </VStack>
+                    {
+                        userData.address && userData.name && userData.phone ?
+                            <VStack space='1' px='3' py='2' backgroundColor='white' rounded='sm'>
+                                <Text fontSize='xs'>{`${userData.name} ( ${userData.phone} )`}</Text>
+                                <Text fontSize='xs'>{userData.address}</Text>
+                            </VStack>
+                            :
+                            <Button onPress={() => navigation.navigate('Profile')} backgroundColor='tertiary.500' _text={{ fontWeight: 'bold' }}>
+                                Lengkapi Profile
+                            </Button>
+                    }
                 </Box>
+                {
+                    userData.address && userData.name && userData.phone ?
+                        null
+                        :
+                        <Text px='4' fontWeight='thin' fontSize='10' color='danger.500'>
+                            *Data profile anda belum lengkap! Untuk bertransaksi, data seperti Nama, Nomor Hp, dan Alamat diperlukan.
+                        </Text>
+                }
                 <Box rounded='lg' borderWidth='0' my='1' px='3' >
                     <Text fontSize='lg' fontWeight='bold' mb='1'>Pengiriman</Text>
                     <Pressable onPress={() => setOpenDeliveryMethodSheet(true)} >
@@ -179,7 +200,7 @@ export default function CheckoutScreen({ navigation }: RootStackScreenProps<'Che
                         <Text fontSize='sm'>Total Pembayaran</Text>
                         <Text fontSize='lg' lineHeight='xs' fontWeight='bold'>{`Rp ${totalPayment}`}</Text>
                     </VStack>
-                    <Button isLoading={isLoading} onPress={handlePressOrder} variant='solid' colorScheme='tertiary' _text={{ color: '#fff' }} rounded='lg' py='3' px='8'>
+                    <Button isDisabled={!userData.address || !userData.name || !userData.phone} isLoading={isLoading} onPress={handlePressOrder} variant='solid' colorScheme='tertiary' _text={{ color: '#fff' }} rounded='lg' py='3' px='8'>
                         {`Sewa`}
                     </Button>
                 </HStack>
