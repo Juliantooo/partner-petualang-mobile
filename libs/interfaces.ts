@@ -30,14 +30,6 @@ export interface IUserDataProps extends IAuthValues {
     image: string,
     navigation: RootTabScreenProps<'Profile'>
 }
-export interface IUserData extends IAuthValues {
-    name: string,
-    id: string,
-    phone: string,
-    address: string,
-    image: string,
-}
-
 export interface IItem {
     id?: string,
     category?: string,
@@ -60,13 +52,13 @@ export interface ICartItem extends IItem {
 export type IOrderItem = ICartItem
 
 export interface IUser {
-    address?: 'string',
-    email?: 'string',
-    id?: 'string',
-    image?: 'string',
-    name?: 'string',
-    password?: 'string',
-    phone?: 'string',
+    address?: string,
+    email?: string,
+    id?: string,
+    image?: string,
+    name?: string,
+    password?: string,
+    phone?: string,
 }
 
 export interface IOrder {
@@ -75,9 +67,13 @@ export interface IOrder {
     paymentMethod?: string,
     status?: string,
     discountAmount?: number,
-    totalPayment?: string,
+    totalPayment?: number,
     user?: IUser,
-    items?: Array<IOrderItem>
+    items?: Array<IOrderItem>,
+    startRentDate?: string,
+    endRentDate?: string,
+    daysOfRent?: number,
+    orderDate?: string
 }
 
 
