@@ -1,20 +1,20 @@
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { IAuthValues, ICartItem, IUserData, IWishlistItem } from "../libs/interfaces";
+import { IAuthValues, ICartItem, IUser, IWishlistItem } from "../libs/interfaces";
 
 const auth = getAuth();
 
 export const authRegister = async ({ email, password }: IAuthValues) => {
-    const response = await createUserWithEmailAndPassword(auth, email, password)
+    const response = await createUserWithEmailAndPassword(auth, email!, password!)
         .then(async (userCredential: any) => {
             const user = userCredential.user
-            const userData: IUserData = {
+            const userData: IUser = {
+                id: user.uid,
                 email,
                 password,
-                id: user.uid,
                 address: '',
-                name: '',
+                name: email?.split('@')[0],
                 phone: '',
                 image: '',
             }
@@ -26,7 +26,7 @@ export const authRegister = async ({ email, password }: IAuthValues) => {
 }
 
 export const authLogin = async ({ email, password }: IAuthValues) => {
-    const response = await signInWithEmailAndPassword(auth, email, password)
+    const response = await signInWithEmailAndPassword(auth, email!, password!)
         .then((userCredential) => {
             const user = userCredential.user
             return user
@@ -35,8 +35,8 @@ export const authLogin = async ({ email, password }: IAuthValues) => {
     return response
 }
 
-export const createUser = async ({ email, password, id, address, name, phone, image }: IUserDataProps) => {
-    const userRef = doc(db, 'users', id)
+export const createUser = async ({ email, password, id, address, name, phone, image }: IUser) => {
+    const userRef = doc(db, 'users', id!)
     await setDoc(userRef, {
         email, password, id, address, name, phone, image
     })
