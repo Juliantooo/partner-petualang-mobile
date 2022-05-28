@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IUserData } from '../../libs/interfaces'
+import { IUser } from '../../libs/interfaces'
 
 export interface CounterState {
   authToken: string,
-  userData: IUserData,
+  userData: IUser,
 }
 
 const initialState: CounterState = {
@@ -29,7 +29,7 @@ export const userSlice = createSlice({
         authToken: action.payload
       }
     },
-    SET_USER_DATA: (state, action: PayloadAction<IUserData>) => {
+    SET_USER_DATA: (state, action: PayloadAction<IUser>) => {
       return {
         ...state,
         userData: action.payload
