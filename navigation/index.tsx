@@ -10,7 +10,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import LoginScreen from '../screens/LoginScreen';
 import { RootStackParamList, RootStackScreenProps, RootTabParamList, RootTabScreenProps } from '../types';
@@ -19,7 +18,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import EditUserScreen from '../screens/EditUserScreen';
-import { Box, Flex, HStack, Input, InputGroup, InputLeftAddon, Stack as NativeBaseStack } from 'native-base';
+import { Box, Button, Flex, HStack, Input, InputGroup, InputLeftAddon, Stack as NativeBaseStack, Text } from 'native-base';
 import WishListScreen from '../screens/WishListScreen';
 import DetailItemScreen from '../screens/DetailItemScreen';
 import CartIconSection from '../components/CartIcon';
@@ -28,6 +27,12 @@ import CheckoutScreen from '../screens/CheckoutScreen';
 import { StackScreenStatusBarOptions } from '../libs/statusBar';
 import OrderSuccessScreen from '../screens/OrderSuccessScreen';
 import OrderDetailScreen from '../screens/OrderDetailScreen';
+import HistoryTransactionScreen from '../screens/HistoryTransactionScreen';
+import useAuth from '../hooks/useAuth';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { SET_SEARCH_KEYWORDS } from '../store/slicers/sellItems';
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -89,9 +94,9 @@ function RootNavigator() {
       <Stack.Screen name="OrderDetail" component={OrderDetailScreen} options={({ navigation }: RootStackScreenProps<'OrderDetail'>) => (StackScreenStatusBarOptions({
         title: 'Detail Penyewaan'
       }))} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
+      <Stack.Screen name="HistoryTransaction" component={HistoryTransactionScreen} options={({ navigation }: RootStackScreenProps<'HistoryTransaction'>) => (StackScreenStatusBarOptions({
+        title: 'Riwayat Transaksi'
+      }))} />
     </Stack.Navigator>
   );
 }
@@ -103,7 +108,14 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
+  const { isLogin } = useAuth();
+  const dispatch = useDispatch();
+  const [keywords, setKeywords] = React.useState<string>('')
+  const searchValue = useSelector((state: RootState) => state.sellItems.searchKeywords);
+
+  const handleSearch = () => {
+    dispatch(SET_SEARCH_KEYWORDS(keywords));
+  }
 
   return (
     <BottomTab.Navigator
@@ -136,10 +148,12 @@ function BottomTabNavigator() {
               <Input
                 type='text'
                 w='80%'
-                defaultValue=""
+                defaultValue={keywords}
                 name='search'
                 placeholder="Cari tas mendaki..."
-                value=''
+                value={keywords}
+                onChangeText={(val) => setKeywords(val)}
+                onSubmitEditing={handleSearch}
                 InputLeftElement={
                   <Ionicons
                     name="search-outline"
@@ -150,6 +164,7 @@ function BottomTabNavigator() {
                 }
                 variant='outline'
                 borderColor='#fff'
+                color='white'
                 placeholderTextColor='#fff'
                 _focus={{
                   borderColor: '#fff'
@@ -204,6 +219,9 @@ function BottomTabNavigator() {
           headerStyle: {
             backgroundColor: '#10b981',
           },
+          headerRightContainerStyle: {
+            paddingRight: 20
+          },
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} size={23} />,
           headerLeft: () => (
             <Pressable
@@ -218,7 +236,16 @@ function BottomTabNavigator() {
                 style={{ marginLeft: 15 }}
               />
             </Pressable>
-          )
+          ),
+          headerRight: () => {
+            if (isLogin) {
+              return (
+                <Button onPress={() => navigation.push('HistoryTransaction')} size='sm' variant='outline' _text={{ color: 'white', fontWeight: 'bold' }} borderColor='white' >
+                  Riwayat transaksi
+                </Button>
+              )
+            }
+          },
         })}
       />
     </BottomTab.Navigator>
