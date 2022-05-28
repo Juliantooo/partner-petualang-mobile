@@ -4,7 +4,14 @@ import { ICartItem, IOrderItem } from "../libs/interfaces";
 import notification from "../libs/notification";
 import { updateCartItemsUser } from "../services/user";
 import { RootState } from "../store";
-import { ADD_CART_ITEM, ADD_CART_ITEM_COUNT, REMOVE_CART_ITEM, SET_CART_ITEMS, SET_CART_ITEM_COUNT, SUBTRACT_CART_ITEM } from "../store/slicers/cartItems";
+import {
+    ADD_CART_ITEM,
+    ADD_CART_ITEM_COUNT,
+    REMOVE_CART_ITEM,
+    SET_CART_ITEMS,
+    SET_CART_ITEM_COUNT,
+    SUBTRACT_CART_ITEM
+} from "../store/slicers/cartItems";
 import useAuth from "./useAuth";
 
 
@@ -105,7 +112,14 @@ const useCartItems = () => {
 
     useEffect(() => {
         setCartItemsCount(cartItems.length);
-        updateCartItemsUser(cartItems, userData.id);
+        if (userData.id) {
+            updateCartItemsUser(cartItems, userData.id);
+        }
+        if (selectedItemsForOrder.length > 0) {
+            const idItems = selectedItemsForOrder.map((item: IOrderItem) => item.id);
+            const newSelectedItemsForOrder = cartItems.filter((item: ICartItem) => idItems.includes(item.id));
+            setSelectedItemsForOrder(newSelectedItemsForOrder)
+        }
     }, [cartItems])
 
 
