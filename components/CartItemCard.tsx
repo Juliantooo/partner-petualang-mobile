@@ -12,6 +12,7 @@ const CartItemCard = ({
     discount,
     count,
     stock,
+    note,
     handleAddCartItemCount,
     handleSubtractCartItemCount,
     handleRemoveItemInCart,
@@ -19,11 +20,13 @@ const CartItemCard = ({
     handleAddItemToSelectedItemForOrder,
     handleRemoveItemFromSelectedItemForOrder,
     isSelectedItemForOrderContainThisItem,
+    handleSetNote,
 }: any) => {
 
     const { isOpen, onClose, onOpen } = useDisclose();
     const [onFocus, setOnFocus] = useState<boolean>(false);
     const [value, setValue] = useState<number>(count);
+    const [itemNote, setItemNote] = useState<string>('');
 
     const handleChange = (inputValue: string) => {
         const inputValueNumber = parseInt(inputValue, 10);
@@ -41,8 +44,12 @@ const CartItemCard = ({
         if (!value) setValue(count);
         setOnFocus(false);
     }
+    const handleBlurInputNote = () => {
+        handleSetNote(itemNote, id)
+        onClose();
+    }
 
-    const handleChangeValue = (isChecked) => {
+    const handleChangeValue = (isChecked: boolean) => {
         if (isChecked) return handleAddItemToSelectedItemForOrder(id);
         handleRemoveItemFromSelectedItemForOrder(id);
     }
@@ -81,7 +88,12 @@ const CartItemCard = ({
                         <View style={styles.floatingLabel} ml='3' px='0.5' backgroundColor='white' mb={-2} >
                             <Text fontSize='xs' >Tulis catatan untuk barang ini</Text>
                         </View>
-                        <Input borderColor='tertiary.500'
+                        <Input
+                            onChangeText={(val) => setItemNote(val)}
+                            onBlur={handleBlurInputNote}
+                            defaultValue={note}
+                            value={itemNote}
+                            borderColor='tertiary.500'
                             _focus={{
                                 borderColor: 'tertiary.500',
                                 backgroundColor: 'white'
@@ -90,7 +102,12 @@ const CartItemCard = ({
                     </Box>
                     :
                     <Pressable onPress={() => onOpen()}>
-                        <Text fontSize='xs' color='tertiary.500'>Tulis Catatan</Text>
+                        {
+                            note ?
+                                <Text fontSize='xs' >{`Catatan : ${note}`}</Text>
+                                :
+                                <Text fontSize='xs' color='tertiary.500'>Tulis Catatan</Text>
+                        }
                     </Pressable>
 
             }
