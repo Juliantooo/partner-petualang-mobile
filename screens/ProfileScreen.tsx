@@ -42,7 +42,7 @@ export default function ProfileScreen({ navigation }: RootTabScreenProps<'Profil
   }
 
   useEffect(() => {
-    const newUserData = Object.entries(userData).filter((data) => data[0] !== 'password')
+    const newUserData = Object.entries(userData)
       .map((data) => {
         const newData = {
           key: data[0],
@@ -53,11 +53,10 @@ export default function ProfileScreen({ navigation }: RootTabScreenProps<'Profil
             keyType: data[0] === 'email' ? 'email-address' : 'default',
           }
         }
-        if (data[0] !== 'password' && data[0] !== 'id') {
-          return newData
-        }
-        return null
+        return newData
       })
+      .filter((data) => data?.key !== 'password' && data?.key !== 'email' && data?.key !== 'id')
+
 
     setMapUserData(newUserData);
   }, [userData])
