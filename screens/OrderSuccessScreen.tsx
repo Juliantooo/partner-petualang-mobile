@@ -1,8 +1,7 @@
-import { Box, Text, Image, HStack, Button, VStack } from "native-base";
+import { Box, Text, Image, Button, VStack } from "native-base";
 import { RootStackScreenProps } from "../types";
 import useOrderItems from "../hooks/useOrderItems";
 import { ROUTES_NAME } from "../libs/router";
-
 import OrderSuccessIcon from '../assets/images/order-success.png'
 
 export default function OrderSuccessScreen({ navigation }: RootStackScreenProps<'OrderSuccess'>) {
@@ -21,9 +20,9 @@ export default function OrderSuccessScreen({ navigation }: RootStackScreenProps<
                         <Text textAlign='center' color='gray.800'>Sekarang, kamu hanya perlu mengambil barangmu dan menyelesaikan pembayaran.</Text>
                 }
                 <Button mt='5' variant='solid' _text={{ fontWeight: 'bold' }} backgroundColor='tertiary.500' color='white' px='4' onPress={() => navigation.navigate(ROUTES_NAME.HOME)}>
-                    Belanja Lagi
+                    Lihat Peralatan Lainnya
                 </Button>
-                <Button mt='2' variant='outline' borderColor='tertiary.500' _text={{ fontWeight: 'bold', color: 'tertiary.500' }} backgroundColor='white' px='4' onPress={() => navigation.navigate('OrderDetail')}>
+                <Button mt='2' variant='outline' borderColor='tertiary.500' _text={{ fontWeight: 'bold', color: 'tertiary.500' }} backgroundColor='white' px='4' onPress={() => navigation.navigate('OrderDetail', { idOrder: order.id })}>
                     Lihat Detail Order
                 </Button>
             </VStack>
