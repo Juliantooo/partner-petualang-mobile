@@ -4,8 +4,16 @@ import { TouchableOpacity } from "react-native";
 import useAuth from "../hooks/useAuth";
 import { ROUTES_NAME } from "../libs/router";
 import { MaterialIcons } from '@expo/vector-icons';
+import { IUser } from "../libs/interfaces";
+import { RootTabScreenProps } from "../types";
 
-export default function BiodataList({ userData, navigation, handleLogout }: any) {
+interface IBiodataListPorps {
+    userData: any,
+    navigation: RootTabScreenProps<'Profile'>,
+    handleLogout: () => void,
+}
+
+export default function BiodataList({ userData, navigation, handleLogout }: IBiodataListPorps) {
 
     const { isLogin } = useAuth()
 
