@@ -1,7 +1,18 @@
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { Badge, Box, Button, HStack, IconButton, Image, Text, VStack } from 'native-base'
 
-const WishListCard = ({ image, name, price, discount, stock, id, handleClickDeleteWishlist, handleClickAddToCart }: any) => {
+interface IWishListCardProps {
+    image: string,
+    name: string,
+    price: number,
+    discount: number,
+    stock: number,
+    id: string,
+    handleClickDeleteWishlist: (id: string) => void,
+    handleClickAddToCart: <T, > (id: string) => void
+}
+
+const WishListCard = ({ image, name, price, discount, stock, id, handleClickDeleteWishlist, handleClickAddToCart }: IWishListCardProps) => {
     const stars = [0, 1, 2, 3, 4]
     return (
         <Box shadow='4' rounded='md' p='3' backgroundColor='white'>
@@ -43,7 +54,7 @@ const WishListCard = ({ image, name, price, discount, stock, id, handleClickDele
                             color: '#94a3b8'
                         }
                     }} />
-                    <Button onPress={() => handleClickAddToCart(id)} flexGrow='1' variant='outline' colorScheme={stock > 0 ? 'tertiary' : 'blueGray'} borderColor={stock > 0 ? 'tertiary.500' : 'blueGray.400'}>
+                    <Button onPress={() => handleClickAddToCart<string>(id)} flexGrow='1' variant='outline' colorScheme={stock > 0 ? 'tertiary' : 'blueGray'} borderColor={stock > 0 ? 'tertiary.500' : 'blueGray.400'}>
                         <HStack space='1' alignItems='center' justifyContent='center'>
                             <FontAwesome
                                 name='plus'

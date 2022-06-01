@@ -1,7 +1,16 @@
 
 import { Box, HStack, Image, Text, VStack } from 'native-base'
 
-const CheckoutItemCard = ({ image, name, price, discount, count, note }: any) => {
+interface ICheckoutItemCard {
+    image?: string,
+    name: string,
+    price: number,
+    discount: number,
+    count: number,
+    note: string,
+}
+
+const CheckoutItemCard = ({ image, name, price, discount, count, note }: ICheckoutItemCard) => {
 
     return (
         <Box px='2' py='2' backgroundColor='white' rounded='sm'>
