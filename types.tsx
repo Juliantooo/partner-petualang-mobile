@@ -19,7 +19,9 @@ export type RootStackParamList = {
   NotFound: undefined;
   Login: undefined;
   Register: undefined;
-  EditUser: undefined;
+  EditUser: {
+    data: any
+  };
   DetailItem: {
     id: string
   };
