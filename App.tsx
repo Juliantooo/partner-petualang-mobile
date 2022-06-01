@@ -9,6 +9,7 @@ import './firebase/firebase';
 import { LogBox } from 'react-native';
 import { Provider } from 'react-redux'
 import { store } from './store';
+import ErrorView from './components/ErrorView';
 
 
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
@@ -24,8 +25,10 @@ export default function App() {
       <SafeAreaProvider>
         <Provider store={store}>
           <NativeBaseProvider>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
+            <ErrorView>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar />
+            </ErrorView >
           </NativeBaseProvider>
         </Provider>
       </SafeAreaProvider>
