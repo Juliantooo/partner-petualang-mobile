@@ -28,7 +28,6 @@ const useCartItems = () => {
     const [selectedItemsForOrder, setSelectedItemsForOrder] = useState<IOrderItem[]>([]);
 
     const findItemWithId = (id: string) => cartItems.find((item: ICartItem) => item.id === id);
-    const filterItemsWithId = (id: string, items: any) => items.filter((item: ICartItem) => item.id !== id);
 
     const addItemToCart = (item: ICartItem) => {
         const cartItem = {
@@ -89,7 +88,7 @@ const useCartItems = () => {
     }
 
     const removeItemFromSelectedItemForOrder = (id: string) => {
-        const items = filterItemsWithId(id, selectedItemsForOrder);
+        const items: IOrderItem[] = selectedItemsForOrder.filter((item: IOrderItem) => item.id !== id);
         setSelectedItemsForOrder(items);
     }
 
