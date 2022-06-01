@@ -1,10 +1,20 @@
-import { Badge, Box, Center, HStack, Image, Text, VStack } from 'native-base';
+import { Badge, Box, HStack, Image, Pressable, Text, VStack } from 'native-base';
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
 
-const CardItem = ({ image, name, price, discount, category, rented, id, handlePressItemCard }) => {
+interface ICardItemsProps {
+    image?: string,
+    name: string,
+    price: number,
+    discount: number,
+    category: string,
+    rented: number,
+    id: string,
+    handlePressItemCard: (id: string) => void
+}
+
+const CardItem = ({ image, name, price, discount, category, rented, id, handlePressItemCard }: ICardItemsProps) => {
     return (
-        <TouchableOpacity onPress={() => handlePressItemCard(id)}>
+        <Pressable onPress={() => handlePressItemCard(id)}>
             <VStack w='48' space='3' rounded='lg' shadow='6' backgroundColor='white' my='4'>
                 <Box position='relative'>
                     <Image rounded='lg' style={{ aspectRatio: 1, resizeMode: 'cover' }} w='full' src={image} alt='product' />
@@ -25,7 +35,7 @@ const CardItem = ({ image, name, price, discount, category, rented, id, handlePr
                     <Text fontSize='xs'>{`Tersewa ${rented}`}</Text>
                 </VStack>
             </VStack>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
