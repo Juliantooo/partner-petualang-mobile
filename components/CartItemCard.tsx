@@ -4,6 +4,25 @@ import { Box, HStack, VStack, Image, Text, Badge, Pressable, useDisclose, Input,
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native'
 
+interface ICartItemCardProps {
+    id: string,
+    image?: string,
+    name: string,
+    price: number,
+    discount?: number,
+    count?: number,
+    stock?: number,
+    note?: string,
+    handleAddCartItemCount: (id: string) => void,
+    handleSubtractCartItemCount: (id: string) => void,
+    handleRemoveItemInCart: (id: string) => void,
+    handleSetCartItemCount: (id: string, count: number) => void,
+    handleAddItemToSelectedItemForOrder: (id: string) => void,
+    handleRemoveItemFromSelectedItemForOrder: (id: string) => void,
+    isSelectedItemForOrderContainThisItem: (id: string) => void,
+    handleSetNote: (itemNote: string, id: string) => void,
+}
+
 const CartItemCard = ({
     id,
     image,
@@ -21,7 +40,7 @@ const CartItemCard = ({
     handleRemoveItemFromSelectedItemForOrder,
     isSelectedItemForOrderContainThisItem,
     handleSetNote,
-}: any) => {
+}: ICartItemCardProps) => {
 
     const { isOpen, onClose, onOpen } = useDisclose();
     const [onFocus, setOnFocus] = useState<boolean>(false);
