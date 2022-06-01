@@ -45,10 +45,10 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }} >
       <ScrollView>
-        <VStack space='4'>
-          <Box>
+        <VStack space='3' mt='3'>
+          {/* <Box>
             <Banner />
-          </Box>
+          </Box> */}
           <Box px='2' >
             <HStack px='3' mb='2' alignItems='center' justifyContent='space-between'>
               <Text fontSize='lg' fontWeight='bold'>Daftar Barang</Text>
@@ -69,7 +69,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
                     <SkeletonCard key={idx} />
                   ))
                   :
-                  filteredItems.map((item: any) => (
+                  filteredItems.map((item: IItem) => (
                     <CardItem
                       key={item.id}
                       image={item.image}
