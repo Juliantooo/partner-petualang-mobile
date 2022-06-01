@@ -6,7 +6,7 @@ interface IStackScreenStatusBarOptionsProps {
     headerShadowVisible?: boolean;
     headerBackgroundColor?: string;
     headerTtitleDisplay?: string;
-    headerRight?: any
+    headerRight?: React.ReactNode
 }
 
 
