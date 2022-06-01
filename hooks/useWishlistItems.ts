@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
+import { IItem, IWishlistItem } from '../libs/interfaces';
 import notification from '../libs/notification';
 import { updateWishlistUser } from '../services/user';
 import { RootState } from "../store"
@@ -15,22 +16,22 @@ const useWishlistItems = () => {
 
     const [wishlistItemsCount, setWishlistItemsCount] = useState<number>(0);
 
-    const addItemToWishlist = async (item: any) => {
+    const addItemToWishlist = async (item: IItem) => {
         dispatch(ADD_WISH_LIST_ITEM(item));
         notification.success(`Berhasil menambahkan ke wishlist`);
         const items = [...wishlistItems, item]
-        await updateWishlistUser(items, userData.id);
+        await updateWishlistUser(items, userData.id!);
     }
 
     const removeItemFromWishlist = async (id: string) => {
         dispatch(REMOVE_WISH_LIST_ITEM(id));
         notification.success(`Berhasil menghapus wishlist`);
-        const items = wishlistItems.filter((item) => item.id !== id);
-        await updateWishlistUser(items, userData.id);
+        const items = wishlistItems.filter((item: IWishlistItem) => item.id !== id);
+        await updateWishlistUser(items, userData.id!);
     }
 
     const isWishlistItem = (id: string) => {
-        return wishlistItems.some((item) => item.id === id);
+        return wishlistItems.some((item: IWishlistItem) => item.id === id);
     }
 
     useEffect(() => {
