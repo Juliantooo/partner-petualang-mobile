@@ -17,7 +17,7 @@ export default function WishListScreen({ navigation }: RootTabScreenProps<'WishL
     const { wishlistItems, wishlistItemsCount, removeItemFromWishlist } = useWishlistItems();
     const { addItemToCart, isItemAlreadyInCart, addCartItemCount } = useCartItems();
 
-    const handleClickAddToCart = (id: string) => {
+    const handleClickAddToCart = <T,>(id: string) => {
         if (!isLogin) {
             notification.error('Anda belum masuk ke akun anda!');
             return navigation.navigate(ROUTES_NAME.LOGIN)
