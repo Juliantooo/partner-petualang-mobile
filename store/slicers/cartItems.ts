@@ -32,17 +32,17 @@ export const cartItemsSlice = createSlice({
                 cartItems: newWishListItems
             }
         },
-        SUBTRACT_CART_ITEM: (state, action: PayloadAction<any>) => {
+        SUBTRACT_CART_ITEM: (state, action: PayloadAction<string>) => {
             const item: ICartItem = state.cartItems.find((item: ICartItem) => item.id === action.payload)!;
             if (item.count) item.count -= 1;
             return state;
         },
-        ADD_CART_ITEM_COUNT: (state, action: PayloadAction<any>) => {
+        ADD_CART_ITEM_COUNT: (state, action: PayloadAction<string>) => {
             const item: ICartItem = state.cartItems.find((item: ICartItem) => item.id === action.payload)!;
             if (item.count) item.count += 1;
             return state;
         },
-        SET_CART_ITEM_COUNT: (state, action: PayloadAction<any>) => {
+        SET_CART_ITEM_COUNT: (state, action: PayloadAction<string>) => {
             const item: ICartItem = state.cartItems.find((item: ICartItem) => item.id === action.payload.id)!;
             if (item.count) item.count = action.payload.count;
             return state;
