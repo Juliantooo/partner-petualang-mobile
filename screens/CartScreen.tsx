@@ -85,16 +85,16 @@ export default function CartScreen({ navigation }: RootStackScreenProps<'Cart'>)
                                 <Text fontSize='md' fontWeight='bold' color='tertiary.500'>Hapus</Text>
                             </Pressable>
                         </HStack>
-                        <ScrollView key={selectedItemsForOrder} mb='32'>
+                        <ScrollView key={selectedItemsForOrder.length} mb='32'>
                             <VStack>
                                 {
                                     cartItems.map((item: ICartItem) => (
                                         <CartItemCard
                                             key={item.id}
-                                            id={item.id}
+                                            id={item.id!}
                                             image={item.image}
-                                            name={item.name}
-                                            price={item.price}
+                                            name={item.name!}
+                                            price={item.price!}
                                             discount={item.discount}
                                             count={item.count}
                                             stock={item.stock}
@@ -138,7 +138,7 @@ export default function CartScreen({ navigation }: RootStackScreenProps<'Cart'>)
                                             borderRadius: 5,
                                         }
                                     }}
-                                    onDateChange={(date) => {
+                                    onDateChange={(date: string) => {
                                         setStartRentDate(date);
                                     }}
                                 />
@@ -173,7 +173,7 @@ export default function CartScreen({ navigation }: RootStackScreenProps<'Cart'>)
                                             borderRadius: 5,
                                         }
                                     }}
-                                    onDateChange={(date) => {
+                                    onDateChange={(date: string) => {
                                         setEndRentDate(date);
                                     }}
                                 />
