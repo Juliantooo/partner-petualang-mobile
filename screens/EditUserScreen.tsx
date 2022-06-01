@@ -10,10 +10,11 @@ import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from "react";
 import { uploadAvatarProfile } from "../services/extras";
 import notification from "../libs/notification";
+import { RootStackScreenProps } from "../types";
 
 
 
-export default function ({ navigation, route }: any) {
+export default function ({ navigation, route }: RootStackScreenProps<'EditUser'>) {
 
     const [loadingUploadImage, setLoadingUploadImage] = useState<boolean>(false)
     const { idUser } = useAuth();
