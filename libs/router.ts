@@ -1,6 +1,15 @@
 export const ROUTES_NAME = {
-    LOGIN: 'Login',
-    REGISTER: 'Register',
-    EDIT_USER: 'EditUser',
-    HOME: 'Home'
-}
+  LOGIN: "Login",
+  REGISTER: "Register",
+  EDIT_USER: "EditUser",
+  HOME: "Home",
+  CART: "Cart",
+  CHECKOUT: "Checkout",
+  DETAIL_ITEM: "DetailItem",
+  ORDER_SUCCESS: "OrderSuccess",
+  ORDER_DETAIL: "OrderDetail",
+  HISTORY_TRANSACTION: "HistoryTransaction",
+  WISHLIST: "WishList",
+  PROFILE: "Profile",
+  ROOT: "Root",
+};
