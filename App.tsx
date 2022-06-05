@@ -1,18 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NativeBaseProvider } from "native-base";
 
-import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
-import './firebase/firebase';
-import { LogBox } from 'react-native';
-import { Provider } from 'react-redux'
-import { store } from './store';
-import ErrorView from './components/ErrorView';
+import useCachedResources from "./hooks/useCachedResources";
+import useColorScheme from "./hooks/useColorScheme";
+import Navigation from "./navigation";
+import "./firebase/firebase";
+import { LogBox } from "react-native";
+import { Provider } from "react-redux";
+import { store } from "./store";
+import ErrorView from "./components/ErrorView";
 
-
-LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -28,7 +27,7 @@ export default function App() {
             <ErrorView>
               <Navigation colorScheme={colorScheme} />
               <StatusBar />
-            </ErrorView >
+            </ErrorView>
           </NativeBaseProvider>
         </Provider>
       </SafeAreaProvider>
