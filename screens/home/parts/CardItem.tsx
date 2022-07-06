@@ -95,7 +95,7 @@ const CardItem = ({
             <HStack space='2'>
               <Text fontSize='xs'>{`Tersisa ${stock}`}</Text>
               <Divider orientation='vertical' color='black' />
-              <Text fontSize='xs'>{`Tersewa ${rented}`}</Text>
+              {/* <Text fontSize='xs'>{`Tersewa ${rented}`}</Text> */}
             </HStack>
           </VStack>
         </VStack>
