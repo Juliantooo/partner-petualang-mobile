@@ -30,7 +30,6 @@ const CardHistoryTransaction = ({
   handleClickBuyAgain,
   handleClickGoToDetailTransaction,
 }: ICardHistoryTransactionProps) => {
-  console.log("asas", status);
   return (
     <Box p='2' rounded='md' borderWidth='1' borderColor='gray.200'>
       <VStack space='2'>
