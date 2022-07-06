@@ -49,7 +49,7 @@ export default function HistoryTransactionScreen({
   return (
     <Box flex='1' backgroundColor='white'>
       <ScrollView>
-        {ordersHistory.length > 0 ? (
+        {ordersHistory?.length > 0 ? (
           <VStack space='3' p='3'>
             {ordersHistory.map((order: IOrder, idx: number) => (
               <CardHistoryTransaction
