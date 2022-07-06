@@ -89,7 +89,8 @@ export default function CheckoutScreen({
     );
     const discount = orderItems.reduce(
       (result: number, item: IOrderItem) =>
-        result + item.price! * item.count! * (item.discount! / 100),
+        result +
+        item.price! * item.count! * (item.discount! / 100) * order.daysOfRent,
       0,
     );
     setTotalDiscount(discount);
@@ -168,6 +169,7 @@ export default function CheckoutScreen({
         navigation.replace(ROUTES_NAME.ORDER_SUCCESS);
       })
       .catch((err) => {
+        console.log(err);
         notification.error("Gagal sewa barang!, Silahkan coba lagi.");
       })
       .finally(() => {
@@ -233,6 +235,16 @@ export default function CheckoutScreen({
         )}
         <Box rounded='lg' borderWidth='0' my='1' px='3'>
           <Text fontSize='lg' fontWeight='bold' mb='1'>
+            Durasi sewa
+          </Text>
+          <Box px='3' py='2' backgroundColor='white' rounded='sm'>
+            <Text fontSize='md' fontWeight='bold' mb='1'>
+              {`${order.daysOfRent} Hari`}
+            </Text>
+          </Box>
+        </Box>
+        <Box rounded='lg' borderWidth='0' my='1' px='3'>
+          <Text fontSize='lg' fontWeight='bold' mb='1'>
             Pengiriman
           </Text>
           <Pressable onPress={() => setOpenDeliveryMethodSheet(true)}>
@@ -262,7 +274,7 @@ export default function CheckoutScreen({
         )}
         <Box rounded='lg' borderWidth='0' my='1' px='3'>
           <Text fontSize='lg' fontWeight='bold' mb='1'>
-            Pengiriman
+            Pembayaran
           </Text>
           <Pressable onPress={() => setOpenPaymentMethodSheet(true)}>
             <HStack
