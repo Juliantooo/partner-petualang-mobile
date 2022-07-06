@@ -74,7 +74,7 @@ export default function LoginScreen({
 
       if (userData.cartItems) dispatch(SET_CART_ITEMS(userData.cartItems));
 
-      if (userData.wishlistItems.length > 0) {
+      if (userData.wishlistItems?.length > 0) {
         const wishlistItems: Array<IWishlistItem> = userData.wishlistItems.map(
           (wishlistItem: IWishlistItem) => {
             const sellItem: IItem = items.find(

@@ -17,6 +17,10 @@ import notification from "../../libs/notification";
 import useAuth from "../../hooks/useAuth";
 import { ROUTES_NAME } from "../../libs/router";
 import { IItem, IWishlistItem } from "../../libs/interfaces";
+import { useEffect } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import SkeletonWishlistCard from "./parts/SkeletonWishlistCard";
 
 export default function WishListScreen({
   navigation,
@@ -26,6 +30,8 @@ export default function WishListScreen({
     useWishlistItems();
   const { addItemToCart, isItemAlreadyInCart, addCartItemCount } =
     useCartItems();
+  const { userData } = useAuth();
+  const { setWishListItems, isLoading } = useWishlistItems();
 
   const handleClickWishlistCard = (id: string) => {
     navigation.push(ROUTES_NAME.DETAIL_ITEM, { id });
@@ -57,7 +63,14 @@ export default function WishListScreen({
             {WishlistScreenTitle()}
           </Text>
           <VStack space='4'>
-            {wishlistItems.length > 0 ? (
+            {isLoading ? (
+              <>
+                <SkeletonWishlistCard />
+                <SkeletonWishlistCard />
+                <SkeletonWishlistCard />
+                <SkeletonWishlistCard />
+              </>
+            ) : wishlistItems.length > 0 ? (
               wishlistItems.map((item: IItem) => (
                 <WishListCard
                   key={item.id}

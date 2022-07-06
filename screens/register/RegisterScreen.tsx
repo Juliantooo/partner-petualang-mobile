@@ -31,7 +31,7 @@ export default function RegisterScreen({
     actions: FormikHelpers<any>,
   ) => {
     await authRegister({ email: values.email, password: values.password })
-      .catch(() => {
+      .catch((er) => {
         actions.setSubmitting(false);
         notification.error(REGISTER_ERROR_MESSAGE);
       })
