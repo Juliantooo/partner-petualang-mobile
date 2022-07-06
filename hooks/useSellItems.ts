@@ -5,6 +5,7 @@ import { getItems } from "../services/items";
 import { RootState } from "../store";
 import { SET_SELL_ITEMS } from "../store/slicers/sellItems";
 import useLoading from "./useLoading";
+import { useIsFocused } from "@react-navigation/native";
 
 interface IfilterItemsProps {
   sortBy?: string;
@@ -18,6 +19,7 @@ const useSellItems = () => {
     DESCENDING = "DESCENDING",
   }
 
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const searchKeywords = useSelector(
     (state: RootState) => state.sellItems.searchKeywords,
@@ -66,7 +68,7 @@ const useSellItems = () => {
 
   useEffect(() => {
     getAllItems();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     filterItems({ sortBy: "", items });
