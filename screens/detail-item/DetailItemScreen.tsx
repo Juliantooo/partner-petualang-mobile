@@ -103,7 +103,7 @@ export default function DetailItemScreen({
             </HStack>
             <Text fontSize='md'>{detailItem.name}</Text>
             <HStack space='5' alignItems='center'>
-              <Text fontSize='xs'>{`Tersewa ${detailItem.rented} kali`}</Text>
+              {/* <Text fontSize='xs'>{`Tersewa ${detailItem.rented} kali`}</Text> */}
               <Text fontSize='xs'>{`Tersisa ${detailItem.stock}`}</Text>
               <HStack
                 space='2'
