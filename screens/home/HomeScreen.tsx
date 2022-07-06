@@ -15,6 +15,7 @@ import CardItem from "./parts/CardItem";
 import SkeletonCard from "../../components/Skeleton";
 import { IItem } from "../../libs/interfaces";
 import { ROUTES_NAME } from "../../libs/router";
+import { useEffect } from "react";
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
   const {
@@ -22,6 +23,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
     filterItemsOption,
     filteredItems,
     filterType,
+    getAllItems,
     setFilterType,
   } = useSellItems();
   const skeletonNum = Array(6)
@@ -31,6 +33,10 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
   const handlePressItemCard = (id: string) => {
     navigation.navigate(ROUTES_NAME.DETAIL_ITEM, { id });
   };
+
+  useEffect(() => {
+    getAllItems();
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
